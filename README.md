@@ -11,13 +11,25 @@ a python script to collect the information of regional github users, the default
 
 $ export ACCESS_TOKEN=your_github_access_token
 
-For regional user information.
+For regional user information.   
+
 $ python collect_users.py
 
-Collected user information will be saved to 'Location Name'.csv, ie. Hong Kong.csv for the default location.
+Collected user information will be saved to 'Location Name'.csv, ie. Hong Kong.csv for the default location. You can use environment variables to set a custom location before run the program.
+
+$ export LOCATION='United State'
+
+Other qualifiers for GitHub search users API can be used. Examples:
+
+$ export LAST_CREATED_DATE='2019-06-16'
+
+$ export LAST_UID='12345'
+
+$ export QUALIFIER='type:user'
 
 For events of regional users in last 3 months. (in development)
 (missing in this repos, will be released, or pls contact us)
+
 $ python collect_events.py
 
 Collected public events will be saved to 'Location Name' - events.csv, ie. Hong Kong - events.csv for the default location.
