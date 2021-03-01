@@ -17,7 +17,7 @@ $ python collect_users.py
 
 Collected user information will be saved to 'Location Name'.csv, ie. Hong Kong.csv for the default location. You can use environment variables to set a custom location before run the program.
 
-$ export LOCATION='United State'
+$ export LOCATION='USA'
 
 Other qualifiers for GitHub search users API can be used. Examples:
 
