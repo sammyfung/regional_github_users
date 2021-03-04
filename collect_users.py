@@ -1,14 +1,7 @@
 from github import Github, RateLimitExceededException
 import os, csv, re, time
-from datetime import datetime, timedelta
-
-def next_api_access(gh):
-    now = datetime.now()
-    next_hour = datetime.fromtimestamp(gh.rate_limiting_resettime)
-    seconds = (next_hour - now).total_seconds() + 1
-    print('Sleep until %s (%s sec)' % (next_hour, seconds))
-    return seconds
-
+from datetime import datetime
+from libs.api import next_api_access
 
 def retrieve_users():
     ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN')
