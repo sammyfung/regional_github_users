@@ -4,8 +4,9 @@ a python script to collect the information of regional github users using [GitHu
 
 ## Requirements
 
-1. [PyGithub](https://github.com/PyGithub/PyGithub)
-2. GitHub Access Token
+1. Python 3.6 or later
+2. [PyGithub](https://github.com/PyGithub/PyGithub)
+3. [GitHub Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
 
 Installing required python libraries thru requirements.txt
 
@@ -15,17 +16,19 @@ $ pip install -r requirements.txt
 
 ## Run
 
+It's recommended to generate your GitHub access token and export as an environment variable on Linux/OSX.
+
 ```
 $ export ACCESS_TOKEN=your_github_access_token
 ```
 
-For regional user information.   
+### For regional user information   
 
 ```
 $ python collect_users.py
 ```
 
-Collected user information will be saved to 'Location Name'.csv, ie. Hong Kong.csv for the default location. You can use environment variables to set a custom location before run the program.
+It start to collect from the latest created users in the region. Collected user information will be saved to 'Location Name'.csv, ie. Hong Kong.csv for the default location. You can use other environment variables to set a custom location before run the program.
 
 ```
 $ export LOCATION='USA'
@@ -41,11 +44,15 @@ $ export LAST_UID='12345'
 $ export QUALIFIER='type:user'
 ```
 
-For events of regional users in last 3 months.
+### For recent public events of regional users
 
 ```
 $ python collect_events.py
 ```
+
+You must run the collect_users.py first befure running this script. This script will take the data from CSV files outputted by collect_users.py. 
+
+It start to collect from the most followed users in the region. Only events in recent 3 months will be provided thru GitHub API. 
 
 Collected public events will be saved to 'Location Name' - events.csv, ie. Hong Kong - events.csv for the default location.
 
