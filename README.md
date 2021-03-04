@@ -27,16 +27,11 @@ $ export LAST_UID='12345'
 
 $ export QUALIFIER='type:user'
 
-For events of regional users in last 3 months. (in development)
-(missing in this repos, will be released, or pls contact us)
+For events of regional users in last 3 months.
 
 $ python collect_events.py
 
 Collected public events will be saved to 'Location Name' - events.csv, ie. Hong Kong - events.csv for the default location.
-
-## Todo
-
-Developing a script to collect the public events of regional users in last 3 months (limited by GitHub API).
 
 ## Authors
 
