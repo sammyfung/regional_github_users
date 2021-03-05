@@ -87,8 +87,10 @@ if __name__ == '__main__':
     no_of_users = 0
     for i in users:
         no_of_users += 1
-        print('------ %s %s (Followers = %s) ------' % (no_of_users, i[0], i[1]))
         if i[0] == last_user:
             new_user = True
         if new_user:
+            print('------ %s %s (Followers = %s) ------' % (no_of_users, i[0], i[1]))
             collect_events(i[0])
+        else:
+            print('Skipping %s %s (Followers = %s)'% (no_of_users, i[0], i[1]))
