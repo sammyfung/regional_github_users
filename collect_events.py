@@ -19,11 +19,17 @@ def read_user_db():
 
 def collect_events(login):
     gh = Github(ACCESS_TOKEN)
-    try:
-        results = gh.get_user(login).get_public_events()
-        print("Got %s results for %s" % (results.totalCount, login))
-    except GithubException:
-        results = []
+    get_success = False
+    while (not get_success):
+        try:
+            results = gh.get_user(login).get_public_events()
+            print("Got %s results for %s" % (results.totalCount, login))
+            get_success = True
+        except RateLimitExceededException:
+            time.sleep(next_api_access(gh))
+        except GithubException:
+            results = []
+            get_success = True
     count = 0
     repo_counts = {}
     for i in results:
