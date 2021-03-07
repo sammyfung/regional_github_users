@@ -1,4 +1,4 @@
-from github import Github, RateLimitExceededException
+from github import Github, RateLimitExceededException, GithubException
 import os, csv, time
 from datetime import datetime
 from libs.api import next_api_access
@@ -19,10 +19,13 @@ def read_user_db():
 
 def collect_events(login):
     gh = Github(ACCESS_TOKEN)
-    results = gh.get_user(login).get_public_events()
+    try:
+        results = gh.get_user(login).get_public_events()
+        print("Got %s results for %s" % (results.totalCount, login))
+    except GithubException:
+        results = []
     count = 0
     repo_counts = {}
-    print("Got %s results for %s" % (results.totalCount, login))
     for i in results:
         get_success = False
         while (not get_success):
