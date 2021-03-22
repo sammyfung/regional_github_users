@@ -2,25 +2,18 @@ from github import Github, RateLimitExceededException
 import os, csv, re, time
 from datetime import datetime
 from libs.api import next_api_access
+from libs import api_config
 
-def retrieve_users():
-    ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN')
-    location = os.environ.get('LOCATION')
-    if location == None:
-        location = 'Hong Kong'
-    last_created_date = os.environ.get('LAST_CREATED_DATE')
-    if last_created_date == None:
-        last_created_date = datetime.strftime(datetime.today(), "%Y-%m-%d")
-    last_uid = os.environ.get('LAST_UID')
-    if last_uid == None:
-        last_uid = 0
-    else:
-        last_uid = int(last_uid)
-    qualifier = os.environ.get('QUALIFIER')
-    if qualifier == None:
-        qualifier = ''
+def retrieve_users(config):
+    accessToken = config[api_config.GITHUB_ACCESS_TOKEN]
+    location = config[api_config.LOCATION]
+    last_created_date = config[api_config.LAST_CREATED_DATE]
+    last_uid = int(config[api_config.LAST_UID])
+    qualifier =  config[api_config.QUALIFIER]
+
+
     last_created = last_created_date
-    gh = Github(ACCESS_TOKEN)
+    gh = Github(accessToken)
     count = 0
     while last_created != '':
         last_created_start = last_created
@@ -75,5 +68,6 @@ def retrieve_users():
         print('Last Created: %s' % last_created)
 
 if __name__ == '__main__':
-    retrieve_users()
+    config = api_config.get_config_from_env()
+    retrieve_users(config)
 
