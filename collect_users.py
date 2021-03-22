@@ -1,14 +1,16 @@
 from github import Github, RateLimitExceededException
-import os, csv, re, time
+import sys, csv, re, time
 from datetime import datetime
 from libs.api import next_api_access
 from libs import api_config
+import config_reader
 
 def retrieve_users(config):
-    accessToken = config[api_config.GITHUB_ACCESS_TOKEN]
-    location = config[api_config.LOCATION]
-    last_created_date = config[api_config.LAST_CREATED_DATE]
-    last_uid = int(config[api_config.LAST_UID])
+    accessToken = None if not config[api_config.GITHUB_ACCESS_TOKEN] else config[api_config.GITHUB_ACCESS_TOKEN]
+    location = api_config.DEFAULT_LOCATION if not config[api_config.LOCATION] else config[api_config.LOCATION]
+    last_created_date = api_config.getDefaultLastCreadtedDate() if not config[api_config.LAST_CREATED_DATE] else config[api_config.LAST_CREATED_DATE]
+    last_uid =  int(config[api_config.LAST_UID]) if config[api_config.LAST_UID] is not None and config[api_config.LAST_UID].isnumeric() else 0
+
     qualifier =  config[api_config.QUALIFIER]
 
 
@@ -68,6 +70,11 @@ def retrieve_users(config):
         print('Last Created: %s' % last_created)
 
 if __name__ == '__main__':
-    config = api_config.get_config_from_env()
-    retrieve_users(config)
+    try:
+        argv = sys.argv[1:]
+        config = config_reader.getConfig(argv)
+        retrieve_users(config)
+    except Exception as e:
+        print(e)
+
 

@@ -1,8 +1,9 @@
 from github import Github, RateLimitExceededException, GithubException
-import os, csv, time
+import sys, csv, time
 from datetime import datetime
 from libs.api import next_api_access
 from libs import api_config
+import config_reader
 
 def read_user_db(location):
     with open('%s.csv' % (location), newline='', encoding='utf-8') as csvfile:
@@ -73,14 +74,11 @@ def collect_events_for_user(login, accessToken, location):
 
 
 def collect_events(config):
-    accessToken = config[api_config.GITHUB_ACCESS_TOKEN]
-    location = config[api_config.LOCATION]
+    accessToken = None if not config[api_config.GITHUB_ACCESS_TOKEN] else config[api_config.GITHUB_ACCESS_TOKEN]
+    location = api_config.DEFAULT_LOCATION if not config[api_config.LOCATION] else config[api_config.LOCATION]
     last_user = config[api_config.LAST_USER]
 
     new_user = True if last_user is None else False    
-
-    last_created_date = datetime.strftime(datetime.today(), "%Y-%m-%d")
-    qualifier = ''
 
     raw_list = read_user_db(location)
     users = sorted(raw_list.items(), key=lambda i: i[1], reverse=True)
@@ -105,6 +103,12 @@ def collect_events(config):
 
 if __name__ == '__main__':
     config = api_config.get_config_from_env()
-    collect_events(config)
     
+    try:
+        argv = sys.argv[1:]
+        config = config_reader.getConfig(argv)
+        collect_events(config)
+    except Exception as e:
+        print(e)
+
 
