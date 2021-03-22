@@ -56,6 +56,33 @@ It start to collect from the most followed users in the region. Only events in r
 
 Collected public events will be saved to 'Location Name' - events.csv, ie. Hong Kong - events.csv for the default location.
 
+### JSON Configuration 
+In addition to environment variables, JSON file can be used to set the config. 
+(* Config parameters are read from environment variables by default.)
+#### Command Line Argument
+```
+$ python collect_users.py -j <JSON file path>
+$ python collect_events.py -j <JSON file path>
+```
+OR
+```
+$ python collect_users.py --json <JSON file path>
+$ python collect_events.py --json <JSON file path>
+```
+
+
+#### Sample JSON Template
+```json
+{
+    "GITHUB_ACCESS_TOKEN":"",
+    "LOCATION":"Hong Kong",
+    "LAST_CREATED_DATE":"",
+    "LAST_UID":"1",
+    "QUALIFIER":"",
+    "LAST_USER":""
+}
+```
+
 ## Authors
 
 Sammy Fung <sammy@sammy.hk>
