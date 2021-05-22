@@ -1,9 +1,11 @@
 from github import Github, RateLimitExceededException, GithubException
-import os, csv, time
+import sys, csv, time
 from datetime import datetime
 from libs.api import next_api_access
+from libs import api_config
+import config_reader
 
-def read_user_db():
+def read_user_db(location):
     with open('%s.csv' % (location), newline='', encoding='utf-8') as csvfile:
         raw_list = {}
         reader = csv.reader(csvfile, delimiter=',')
@@ -17,8 +19,8 @@ def read_user_db():
     return raw_list
 
 
-def collect_events(login):
-    gh = Github(ACCESS_TOKEN)
+def collect_events_for_user(login, accessToken, location):
+    gh = Github(accessToken)
     get_success = False
     while (not get_success):
         try:
@@ -71,21 +73,16 @@ def collect_events(login):
     print("Counted %s results for " % count)
 
 
-if __name__ == '__main__':
-    ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN')
-    location = os.environ.get('LOCATION')
-    if location == None:
-        location = 'Hong Kong'
-    last_user = os.environ.get('LAST_USER')
-    if last_user == None:
-        new_user = True
-    else:
-        new_user = False
-    last_created_date = datetime.strftime(datetime.today(), "%Y-%m-%d")
-    qualifier = ''
-    raw_list = read_user_db()
-    users = {}
+def collect_events(config):
+    accessToken = None if not config[api_config.GITHUB_ACCESS_TOKEN] else config[api_config.GITHUB_ACCESS_TOKEN]
+    location = api_config.DEFAULT_LOCATION if not config[api_config.LOCATION] else config[api_config.LOCATION]
+    last_user = config[api_config.LAST_USER]
+
+    new_user = True if last_user is None else False    
+
+    raw_list = read_user_db(location)
     users = sorted(raw_list.items(), key=lambda i: i[1], reverse=True)
+
     with open('%s - events.csv' % (location), 'a', newline='', encoding='utf-8') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',',
                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -100,6 +97,18 @@ if __name__ == '__main__':
             new_user = True
         if new_user:
             print('------ %s %s (Followers = %s) ------' % (no_of_users, i[0], i[1]))
-            collect_events(i[0])
+            collect_events_for_user(i[0], accessToken, location)
         else:
             print('Skipping %s %s (Followers = %s)'% (no_of_users, i[0], i[1]))
+
+if __name__ == '__main__':
+    config = api_config.get_config_from_env()
+    
+    try:
+        argv = sys.argv[1:]
+        config = config_reader.getConfig(argv)
+        collect_events(config)
+    except Exception as e:
+        print(e)
+
+
