@@ -18,7 +18,7 @@ def getDefaultLastCreadtedDate():
 def get_config_from_env():
     config = {}
     config[GITHUB_ACCESS_TOKEN] = getEnvConfigParam(GITHUB_ACCESS_TOKEN, None)
-    config[LOCATION] = getEnvConfigParam(GITHUB_ACCESS_TOKEN, DEFAULT_LOCATION)
+    config[LOCATION] = getEnvConfigParam(LOCATION, DEFAULT_LOCATION)
     config[LAST_CREATED_DATE] = getEnvConfigParam(LAST_CREATED_DATE, getDefaultLastCreadtedDate())
     config[LAST_UID] = getEnvConfigParam(LAST_UID, DEFAULT_LAST_UID)
     config[QUALIFIER] = getEnvConfigParam(QUALIFIER, '')
