@@ -39,18 +39,18 @@ def retrieve_users(config):
                     print(f'skipping UID {i.id} (Last UID = {last_uid}) {gh.rate_limiting} {reset_time}')
                     continue
                 try:
-                    name = i.name.encode('utf-8')
+                    name = i.name
                 except AttributeError:
                     name = None
                 except RateLimitExceededException:
                     time.sleep(next_api_access(gh))
-                    name = i.name.encode('utf-8')
+                    name = i.name
                 try:
-                    bio = i.bio.encode('utf-8')
+                    bio = i.bio
                 except AttributeError:
                     bio = ''
                 try:
-                    company = i.company.encode('utf-8')
+                    company = i.company
                 except AttributeError:
                     company = ''
                 reset_time = datetime.fromtimestamp(gh.rate_limiting_resettime)
